@@ -12,9 +12,6 @@ connectDB();
 import employeeRoute from "./routes/employeeRoute.js";
 import authRoute from "./routes/authRoute.js";
 import checkInRoute from "./routes/checkInRoute.js";
-
-
-app.use(express.json());
 app.use(cors({
     origin: [
         'https://rtcbtb-a447c.web.app/',
@@ -26,7 +23,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'token'],
     credentials: true
 }));
-app.options("*", cors());
+app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 
