@@ -14,7 +14,7 @@ import authRoute from "./routes/authRoute.js";
 import checkInRoute from "./routes/checkInRoute.js";
 app.use(cors({
     origin: [
-        'https://rtcbtb-a447c.web.app/',
+        'https://rtcbtb-a447c.web.app',
         'http://localhost:8080',
         'http://127.0.0.1:8080',
         'http://10.11.0.45:8080' // your PC IP for mobile testing
