@@ -12,7 +12,8 @@ connectDB();
 import employeeRoute from "./routes/employeeRoute.js";
 import authRoute from "./routes/authRoute.js";
 import checkInRoute from "./routes/checkInRoute.js";
-app.use(cors({
+app.use(cors());
+/*app.use(cors({
     origin: [
         'https://rtcbtb-a447c.web.app',
         'http://localhost:8080',
@@ -22,7 +23,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'token'],
     credentials: true
-}));
+}));*/
 
 app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
