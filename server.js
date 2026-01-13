@@ -23,6 +23,17 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'token'],
     credentials: true
 }));
+
+app.use((req, res, next) => {
+    if (req.method === "OPTIONS") {
+        res.header("Access-Control-Allow-Origin", "https://rtcbtb-a447c.web.app");
+        res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+        res.header("Access-Control-Allow-Headers", "Content-Type, Authorization","token");
+        return res.sendStatus(204);
+    }
+    next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
