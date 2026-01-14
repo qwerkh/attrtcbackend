@@ -27,10 +27,11 @@ export const authJWT = (req, res, next) => {
 }
 export const authSecret = (req, res, next) => {
     const token = req.headers.token;
+    console.log(token);
     if (!token) {
         return res.status(401).json({message: "No token provided"});
     }
-
+    console.log(token !== process.env.JWT_SECRET);
     if (token !== process.env.JWT_SECRET) {
         return res.status(403).json({message: "Invalid token"});
     }

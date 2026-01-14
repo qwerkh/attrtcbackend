@@ -45,8 +45,27 @@ export const refreshToken = async (req, res) => {
     if (!user) return res.sendStatus(403);
 
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+        if (decoded.id !== user._id.toString()) {
+            return res.sendStatus(403);
+        }
         if (err) return res.sendStatus(403);
-        const newAccessToken = generateAccessToken(user._id);
-        res.json({accessToken: newAccessToken, refreshToken: token});
+        // 🔄 Rotate refresh token
+        const newRefreshToken = jwt.sign(
+            { userId: user._id },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        const newHashedToken = crypto
+            .createHash("sha256")
+            .update(newRefreshToken)
+            .digest("hex");
+
+        user.refreshToken = newHashedToken;
+        user.save();
+
+
+        const newAccessToken = generateAccessToken(user._id.toString());
+        res.json({accessToken: newAccessToken, refreshToken: newRefreshToken});
     });
 };
