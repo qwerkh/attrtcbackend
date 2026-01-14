@@ -16,9 +16,9 @@ import checkInRoute from "./routes/checkInRoute.js";
 app.use(cors());
 app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Origin", "https://rtcbtb-a447c.web.app,http://localhost:8080");
+        res.header("Access-Control-Allow-Origin", ["https://rtcbtb-a447c.web.app","http://localhost:8080"]);
         res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
-        res.header("Access-Control-Allow-Headers", "Content-Type, Authorization", "token");
+        res.header("Access-Control-Allow-Headers", ["Content-Type", "Authorization", "token"]);
         return res.sendStatus(204);
     }
     next();
