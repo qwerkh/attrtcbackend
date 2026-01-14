@@ -14,11 +14,18 @@ import authRoute from "./routes/authRoute.js";
 import checkInRoute from "./routes/checkInRoute.js";
 
 app.use(cors());
+const allowedOrigins = [
+    "https://rtcbtb-a447c.web.app",
+    "http://localhost:8080"
+];
 app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Origin", ["https://rtcbtb-a447c.web.app","http://localhost:8080"]);
+        const origin = req.headers.origin;
+        if (allowedOrigins.includes(origin)) {
+            res.setHeader("Access-Control-Allow-Origin", origin);
+        }
         res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
-        res.header("Access-Control-Allow-Headers", ["Content-Type", "Authorization", "token"]);
+        res.header("Access-Control-Allow-Headers", "Content-Type,Authorization,token");
         return res.sendStatus(204);
     }
     next();
