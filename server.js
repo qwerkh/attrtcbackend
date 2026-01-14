@@ -13,19 +13,7 @@ import employeeRoute from "./routes/employeeRoute.js";
 import authRoute from "./routes/authRoute.js";
 import checkInRoute from "./routes/checkInRoute.js";
 app.use(cors());
-/*app.use(cors({
-    origin: [
-        'https://rtcbtb-a447c.web.app',
-        'http://localhost:8080',
-        'http://127.0.0.1:8080',
-        'http://10.11.0.45:8080' // your PC IP for mobile testing
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'token'],
-    credentials: true
-}));*/
-
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
         res.header("Access-Control-Allow-Origin", "https://rtcbtb-a447c.web.app");
         res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
@@ -33,7 +21,7 @@ app.use((req, res, next) => {
         return res.sendStatus(204);
     }
     next();
-});
+});*/
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
