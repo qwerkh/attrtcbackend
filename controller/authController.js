@@ -51,9 +51,9 @@ export const refreshToken = async (req, res) => {
         if (err) return res.sendStatus(403);
         // 🔄 Rotate refresh token
         const newRefreshToken = jwt.sign(
-            { userId: user._id },
+            {userId: user._id},
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: "7d" }
+            {expiresIn: "7d"}
         );
 
         const newHashedToken = crypto
@@ -69,3 +69,52 @@ export const refreshToken = async (req, res) => {
         res.json({accessToken: newAccessToken, refreshToken: newRefreshToken});
     });
 };
+
+export const telegramAuth = async (req, res) => {
+    const telegramData = req.body;
+
+    if (!verifyTelegramLogin(telegramData)) {
+        return res.status(401).json({error: "Invalid Telegram login"});
+    }
+
+    // Example user object
+    const user = {
+        telegramId: telegramData.id,
+        username: telegramData.username,
+        firstName: telegramData.first_name,
+        lastName: telegramData.last_name,
+        photo: telegramData.photo_url,
+    };
+
+    // TODO: save/find user in DB
+    // TODO: issue JWT or session
+
+    res.json({
+        success: true,
+        user,
+    });
+};
+
+
+function verifyTelegramLogin(data) {
+    const {hash, ...userData} = data;
+    // Step 1: sort keys
+    const sorted = Object.keys(userData)
+        .sort()
+        .map(key => `${key}=${userData[key]}`)
+        .join("\n");
+
+    // Step 2: create secret key
+    const secretKey = crypto
+        .createHash("sha256")
+        .update(process.env.TELEGRAM_BOT_TOKEN)
+        .digest();
+
+    // Step 3: calculate hash
+    const computedHash = crypto
+        .createHmac("sha256", secretKey)
+        .update(sorted)
+        .digest("hex");
+
+    return computedHash === hash;
+}
