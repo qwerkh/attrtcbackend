@@ -7,7 +7,6 @@ import {generateRefreshToken, generateAccessToken} from "../config/token.js";
 
 export const loginUser = async (req, res) => {
     const user = await userModel.findOne({email: req.body.email, status: true});
-    console.log(user);
     if (!user) return res.status(400).json({error: "Invalid credentials"});
 
     const valid = await bcrypt.compare(req.body.password, user.password);
@@ -19,7 +18,7 @@ export const loginUser = async (req, res) => {
     // save refresh token (hashed recommended)
     user.refreshToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
     await user.save();
-    res.json({token, id: user._id, name: user.name, email: user.email, refreshToken: refreshToken});
+    res.json({token, id: user._id, name: user.name, email: user.email, refreshToken: refreshToken, role: user.role});
 };
 
 export const registerUser = async (req, res) => {

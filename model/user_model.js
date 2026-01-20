@@ -13,6 +13,10 @@ const userSchema = mongoose.Schema({
     status: {
         type: Boolean,
         default: false,
+    },
+    role: {
+        type: String,
+        default: "Teacher",
     }
 });
 userSchema.index({email: 1}, {unique: true});
