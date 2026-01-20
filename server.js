@@ -2,10 +2,11 @@ import express from 'express';
 import * as dotenv from "dotenv";
 import {authJWT, authSecret} from "./middleware/authJWT.js"
 import cors from "cors";
-
+import moment from 'moment-timezone';
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 3000;
+moment.tz.setDefault("Asia/Bangkok");
 import connectDB from "./config/db.js";
 // Connect DB
 connectDB();

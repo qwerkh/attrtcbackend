@@ -6,7 +6,7 @@ import crypto from "crypto";
 import {generateRefreshToken, generateAccessToken} from "../config/token.js";
 
 export const loginUser = async (req, res) => {
-    const user = await userModel.findOne({email: req.body.email});
+    const user = await userModel.findOne({email: req.body.email, status: true});
     console.log(user);
     if (!user) return res.status(400).json({error: "Invalid credentials"});
 

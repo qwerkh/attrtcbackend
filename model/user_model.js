@@ -9,7 +9,11 @@ const userSchema = mongoose.Schema({
     },
     name: String,
     password: String,
-    refreshToken: String
+    refreshToken: String,
+    status: {
+        type: Boolean,
+        default: false,
+    }
 });
 userSchema.index({email: 1}, {unique: true});
 export const userModel = mongoose.model("User", userSchema);
