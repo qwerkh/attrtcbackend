@@ -3,10 +3,10 @@ import {userModel} from "../model/user_model.js";
 import moment from "moment";
 
 export const checkIn = async (req, res) => {
-    const {userId,latitude,longitude} = req.body;
+    const {userId, latitude, longitude} = req.body;
     const userDoc = await userModel.findById(userId);
     if (!userDoc) {
-        return res.status(400).json({error: "Invalid user",message: "Invalid user"});
+        return res.status(400).json({error: "Invalid user", message: "Invalid user"});
     } else {
 
         const distance = getDistanceFromLatLonInMeters(
@@ -33,12 +33,26 @@ export const checkIn = async (req, res) => {
                 message: "Already Checked In/Out",
             })
         }
+        let late = 0;
+        if (typeCheckIn === "MorningIn") {
+            late = moment().diff(moment().hour(7).minute(30).second(0), "minutes")
+        } else if (typeCheckIn === "MorningOut") {
+            late = moment().diff(moment().hour(11).minute(30).second(0), "minutes")
+        } else if (typeCheckIn === "AfternoonIn") {
+            late = moment().diff(moment().hour(13).minute(0).second(0), "minutes")
+        } else {
+            late = moment().diff(moment().hour(17).minute(0).second(0), "minutes")
+        }
         const newCheckIn = new checkInModel({
             userId: userId,
             name: userDoc.name,
             date: date,
             time: time,
             type: typeCheckIn,
+            latitude: latitude,
+            longitude: longitude,
+            distance: distance,
+            late: late
         });
         const id = await newCheckIn.save();
 

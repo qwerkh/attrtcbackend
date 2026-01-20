@@ -6,6 +6,10 @@ const checkInSchema = mongoose.Schema({
     date: String,
     time: String,
     type: String,
+    latitude: String,
+    longitude: String,
+    late: Number,
+    distance: Number,
 })
 
 export const checkInModel = mongoose.model("CheckIn", checkInSchema);
