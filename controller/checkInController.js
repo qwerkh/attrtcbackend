@@ -37,11 +37,11 @@ export const checkIn = async (req, res) => {
         if (typeCheckIn === "MorningIn") {
             late = moment().diff(moment().hour(7).minute(30).second(0), "minutes")
         } else if (typeCheckIn === "MorningOut") {
-            late = moment().diff(moment().hour(11).minute(30).second(0), "minutes")
+            late = -(moment().diff(moment().hour(11).minute(30).second(0), "minutes"))
         } else if (typeCheckIn === "AfternoonIn") {
             late = moment().diff(moment().hour(13).minute(0).second(0), "minutes")
         } else {
-            late = moment().diff(moment().hour(17).minute(0).second(0), "minutes")
+            late = -(moment().diff(moment().hour(17).minute(0).second(0), "minutes"))
         }
         const newCheckIn = new checkInModel({
             userId: userId,
