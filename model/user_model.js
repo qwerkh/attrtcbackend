@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
             trim: true,
         },
         name: String,
+        latinName: String,
         password: String,
         refreshToken: String,
         status: {

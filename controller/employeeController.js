@@ -30,6 +30,7 @@ export const employeeListController = async (req, res) => {
             ? {
                 $or: [
                     {name: {$regex: search, $options: 'i'}},
+                    {latinName: {$regex: search, $options: 'i'}},
                     {email: {$regex: search, $options: 'i'}}
                 ]
             }

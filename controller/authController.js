@@ -22,13 +22,14 @@ export const loginUser = async (req, res) => {
 };
 
 export const registerUser = async (req, res) => {
-    const {email, password, name} = req.body;
-
+    const {email, password, name, latinName} = req.body;
+    let latinNameUpper = latinName.toUpperCase();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const data = await userModel.create({
         email,
         name,
+        latinName: latinNameUpper,
         password: hashedPassword
     });
 
