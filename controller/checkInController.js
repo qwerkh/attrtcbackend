@@ -63,6 +63,91 @@ export const checkIn = async (req, res) => {
     }
 }
 
+export const checkInByDay = async (req, res) => {
+    let {datestart, dateend, page, limit} = req.body;
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 10
+    const skip = (page - 1) * limit
+    const [dataList, total] = await Promise.all([
+        checkInModel.aggregate([
+            {$match: {date: {$gte: datestart, $lte: dateend}}},
+            {$sort: {createdAt: 1}},
+            {
+                $group: {
+                    _id: {
+                        userId: "$userId",
+                        date: "$date",
+                    },
+                    name: {$last: "$name"},
+                    MorningIn: {
+                        $max: {
+                            $cond: [
+                                {$eq: ["$type", "MorningIn"]},
+                                "$late",
+                                null
+                            ]
+                        }
+                    },
+                    AfternoonIn: {
+                        $max: {
+                            $cond: [
+                                {$eq: ["$type", "AfternoonIn"]},
+                                "$late",
+                                null
+                            ]
+                        }
+                    },
+                    MorningOut: {
+                        $max: {
+                            $cond: [
+                                {$eq: ["$type", "MorningOut"]},
+                                "$late",
+                                null
+                            ]
+                        }
+                    },
+                    AfternoonOut: {
+                        $max: {
+                            $cond: [
+                                {$eq: ["$type", "AfternoonOut"]},
+                                "$late",
+                                null
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: "$_id.userId",
+                    name: "$name",
+                    date: "$_id.date",
+                    MorningIn: 1,
+                    AfternoonIn: 1,
+                    MorningOut: 1,
+                    AfternoonOut: 1
+                }
+            },
+            {$skip: skip},
+            {$limit: limit},
+        ]),
+        checkInModel.find({date: {$gte: datestart, $lte: dateend}}).countDocuments()
+
+    ])
+
+    return res.status(200).json({
+        code: "201",
+        data: dataList,
+        pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit)
+        }
+    })
+}
+
 function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000; // Earth radius in meters
     const toRad = (value) => value * Math.PI / 180;

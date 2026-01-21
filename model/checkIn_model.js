@@ -10,6 +10,9 @@ const checkInSchema = mongoose.Schema({
     longitude: String,
     late: Number,
     distance: Number,
-})
+},
+    {
+        timestamps: true   // 👈 adds createdAt & updatedAt
+    })
 
 export const checkInModel = mongoose.model("CheckIn", checkInSchema);
